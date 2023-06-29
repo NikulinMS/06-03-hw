@@ -129,26 +129,31 @@ mysql> select count(*) from orders where price > 300;
 
 ### Задание 2
 
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
-
+Создадим пользователя с требуемыми параметрами: 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+mysql> CREATE USER 'test'@'localhost'
+    ->     IDENTIFIED WITH mysql_native_password BY 'test-pass'
+    ->     WITH MAX_CONNECTIONS_PER_HOUR 100
+    ->     PASSWORD EXPIRE INTERVAL 180 DAY
+    ->     FAILED_LOGIN_ATTEMPTS 3 PASSWORD_LOCK_TIME 2
+    ->     ATTRIBUTE '{"first_name":"James", "last_name":"Pretty"}';
+Query OK, 0 rows affected (0.02 sec)
 ```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 2](ссылка на скриншот 2)`
-
+Предоставим привелегии пользователю test на операции SELECT базы nikulinm_db:
+```
+mysql> GRANT SELECT ON nikulinm_db.* to 'test'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+```
+Используя таблицу INFORMATION_SCHEMA.USER_ATTRIBUTES получим данные по пользователю test:
+```
+mysql> SELECT * from INFORMATION_SCHEMA.USER_ATTRIBUTES where USER = 'test';
++------+-----------+------------------------------------------------+
+| USER | HOST      | ATTRIBUTE                                      |
++------+-----------+------------------------------------------------+
+| test | localhost | {"last_name": "Pretty", "first_name": "James"} |
++------+-----------+------------------------------------------------+
+1 row in set (0.00 sec)
+```
 
 ---
 
