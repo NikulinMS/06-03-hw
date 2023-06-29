@@ -159,25 +159,57 @@ mysql> SELECT * from INFORMATION_SCHEMA.USER_ATTRIBUTES where USER = 'test';
 
 ### Задание 3
 
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
-
+Установим профилирование и изучим вывод профилирования команд:
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+mysql> SET profiling = 1;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+```
+```
+mysql> SHOW PROFILES;
++----------+------------+---------------------------------+
+| Query_ID | Duration   | Query                           |
++----------+------------+---------------------------------+
+|        1 | 0.00016725 | SET profiling = 1
+SHOW PROFILES |
+|        2 | 0.00193100 | SHOW DATABASES                  |
+|        3 | 0.00031100 | SHOW GRANTS                     |
++----------+------------+---------------------------------+
+3 rows in set, 1 warning (0.00 sec)
+```
+В  таблице БД `lnikulinm_db` используется engine InnoDB:
+```
+mysql> SELECT TABLE_NAME, ENGINE FROM information_schema.TABLES where TABLE_SCHEMA = 'nikulinm_db';
++------------+--------+
+| TABLE_NAME | ENGINE |
++------------+--------+
+| orders     | InnoDB |
++------------+--------+
+1 row in set (0.01 sec)
+```
+Измените engine и **приведите время выполнения и запрос на изменения из профайлера в ответе**:
+```
+mysql> SET profiling = 1;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> ALTER TABLE nikulinm_db.orders ENGINE = MyIsam;
+Query OK, 5 rows affected (0.08 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE nikulinm_db.orders ENGINE = InnoDB;
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SHOW PROFILES;
++----------+------------+------------------------------------------------+
+| Query_ID | Duration   | Query                                          |
++----------+------------+------------------------------------------------+
+|        1 | 0.08343750 | ALTER TABLE nikulinm_db.orders ENGINE = MyIsam |
+|        2 | 0.09244800 | ALTER TABLE nikulinm_db.orders ENGINE = InnoDB |
++----------+------------+------------------------------------------------+
+2 rows in set, 1 warning (0.00 sec)
 ```
 
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота](ссылка на скриншот)`
+___
 
 ### Задание 4
 
